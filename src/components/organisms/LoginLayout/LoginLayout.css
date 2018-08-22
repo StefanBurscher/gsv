@@ -1,0 +1,32 @@
+.auth-page-container .front,
+.auth-page-container .back {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: all 0.5s ease-in-out;
+  transform-origin: center center;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.auth-page-container {
+  position: relative;
+}
+.auth-page-container .front {
+  z-index: 900;
+  transform: rotateX(0deg);
+}
+.auth-page-container .back {
+  z-index: 800;
+  transform: rotateX(-180deg);
+  margin-top: -100vh;
+}
+.flip .front {
+  backface-visibility: hidden;
+  transform: rotateX(180deg);
+  z-index: 900;
+}
+.flip .back {
+  backface-visibility: hidden;
+  transform: rotateX(0deg);
+  z-index: 1000;
+}

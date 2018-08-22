@@ -1,0 +1,15 @@
+.copyTextDesc {
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: #B9BFC5;
+    text-align: center;
+}
+.copyText {
+    background: transparent;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(34,36,38,.15)!important;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem;
+}

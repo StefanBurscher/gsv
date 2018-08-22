@@ -1,0 +1,79 @@
+textarea, input, button { outline: none; }
+.ui.inputField {
+    width: 100%;
+    /* margin-bottom: 10px; */
+}
+.ui.inputField input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(34,36,38,.15);
+    border-radius: 0;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(34,36,38,.15)!important;
+    height: 38px;
+    font-family: inherit;
+}
+.ui.inputField input.error {
+    border-bottom-color: 1px solid #db2828!important;
+}
+.inputDiv span {
+    color: #B9BFC5;
+    text-align: left;
+}
+label.inputFieldLabel {
+    display: inline-block;
+    padding-bottom: 20px;
+    position: relative;
+    text-align: left;
+    width: 100%;
+  }
+  label.inputFieldLabelError {
+    padding-bottom: 5px;
+  }
+
+  .placeholderWithError {
+    bottom: 9px;
+     display: none;
+    }
+
+  label.inputFieldLabel input {
+    height: 18px;
+    line-height: 18px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    border-width: 0;
+    border-bottom-width: 1px;
+    padding: 0;
+    padding-left: 4px;
+    border-color: transparent!important;
+    background-color: transparent!important;
+    padding: 0!important;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    border-radius: 0!important;
+  }
+  label.inputFieldLabel input::-webkit-input-placeholder {
+    -webkit-transition: all 200ms ease-out;
+    transition: all 200ms ease-out;
+  }
+  label.inputFieldLabel input + span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 12px;
+    line-height: 1;
+    -webkit-transition: all 200ms ease-out;
+    transition: all 200ms ease-out;
+  }
+  label.inputFieldLabel input:not(:focus):not(.filled)::-webkit-input-placeholder {
+    color: transparent;
+  }
+  label.inputFieldLabel input:not(:focus):not(.filled) + span {
+    line-height: 18px;
+    bottom: 29px;
+    font-size: 14px;
+  }
+  
+  
