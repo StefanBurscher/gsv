@@ -40,7 +40,9 @@ export default class HomePage extends React.Component {
       toggleClassification: false,
       toggleCoin: false,
       posts: [],
-      hashtags: []
+      hashtags: [],
+      coinsTableData: [],
+      currencies: []
     };
     this.toggle = this.toggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
@@ -50,6 +52,7 @@ export default class HomePage extends React.Component {
     this.toggleCoin = this.toggleCoin.bind(this);
     this.renderHashtags = this.renderHashtags.bind(this);
     this.renderPost = this.renderPost.bind(this);
+    this.renderTable = this.renderTable.bind(this);
   }
   componentDidMount() {
     // axios.post('http://173.249.46.156/api/v1/get_hashtags_by_day/1')
@@ -71,9 +74,15 @@ export default class HomePage extends React.Component {
     // this.setState({
     //   hastags: a
     // })
-    axios.get(`https://jsonplaceholder.typicode.com/users`)
-      .then(res => {
-        console.log(res);
+    axios.get('http://173.249.46.156/api/v1/resources/ticker_list')
+      .then(response => {
+        console.log(response.data.data.rows)
+        this.setState({ coinsTableData: response.data.data.rows })
+      })
+    axios.get('http://173.249.46.156/api/v1/resources/currency_list')
+      .then(response => {
+        console.log(response.data.data.rows)
+        this.setState({ currencies: response.data.data.rows })
       })
     axios.get('http://173.249.46.156/api/v1/get_count_hashtags/30')
       .then(response => {
@@ -140,22 +149,22 @@ export default class HomePage extends React.Component {
     });
   }
 
-  renderTable() {
-    var elem = [];
-    for (var k in currencyList) {
-      elem.push(
-        <tr>
-          <th scope="row" className="text-center">{k}</th>
-          <td>Coin name</td>
-          <td><img src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + currencyList[k] + '.png'} alt={k} width="32" className="m-auto d-block" /></td>
-          <td>Blockchain <br />infrastructure</td>
-          <td>coin price</td>
-          <td>coin market capitalization</td>
-        </tr>
-      )
-    }
-    return elem;
-  }
+  // renderTable() {
+  //   var elem = [];
+  //   for (var k in currencyList) {
+  //     elem.push(
+  //       <tr>
+  //         <th scope="row" className="text-center">{k}</th>
+  //         <td>Coin name</td>
+  //         <td><img src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + currencyList[k] + '.png'} alt={k} width="32" className="m-auto d-block" /></td>
+  //         <td>Blockchain <br />infrastructure</td>
+  //         <td>coin price</td>
+  //         <td>coin market capitalization</td>
+  //       </tr>
+  //     )
+  //   }
+  //   return elem;
+  // }
 
   renderHashtags() {
     var elem = [];
@@ -182,6 +191,24 @@ export default class HomePage extends React.Component {
 
     }
     return elem;
+  }
+
+  renderTable() {
+    return (
+      this.state.coinsTableData.map((item, index) => (
+        <tr key={index}>
+          <td> {item.currency_id}</td>
+          <td>
+            <td style={{ border: 0, padding: 0 }}><img src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" /></td>
+            <td style={{ border: 0, padding: 0, paddingLeft: 10 }}><span>{this.state.currencies[item.currency_id].symbol} <br /> {this.state.currencies[item.currency_id].name}</span></td>
+          </td>
+          <td>{item.price_usd}</td>
+          <td><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
+          <td>${item.market_cap}</td>
+          <td>${item.daily_volume}</td>
+        </tr>
+      ))
+    )
   }
 
   render() {
@@ -361,6 +388,16 @@ export default class HomePage extends React.Component {
                   </div>
                   <br />
                   <Table>
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>24h Change</th>
+                        <th>Market Cap</th>
+                        <th>24h Vol(Global)</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       <this.renderTable />
                     </tbody>
