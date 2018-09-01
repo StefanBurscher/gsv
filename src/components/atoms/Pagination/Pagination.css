@@ -1,0 +1,42 @@
+.paginationContainer {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.paginationContainer > li {
+    display: inline;
+    float: left;
+}
+.paginationContainer > li > a {
+    color: #949ba2;
+    display: block;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    width: 2rem;
+}
+.paginationContainer > li > a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.paginationContainer > li > a.paginationSelectedElement {
+    background-color: #1c9cf3;
+    border-radius: 0.5rem;
+    color: white;
+}
+.paginationContainer > li > a.paginationArrowElement {
+    background-color: #949ba2;
+    border-radius: 0.5rem;
+    color: white;
+}
+.paginationContainer > li > a.paginationArrowElement:hover {
+    background-color:#808990;
+    text-decoration: none;
+}
+
+.paginationContainer > li > a.paginationDotsElement {
+    cursor: default;
+}
+.paginationContainer > li > a.paginationDotsElement:hover {
+    text-decoration: none;
+}

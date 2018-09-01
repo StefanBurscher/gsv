@@ -1,5 +1,6 @@
 import React from 'react';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
+import TweetEmbed from 'react-tweet-embed'
 import InstagramEmbed from 'react-instagram-embed'
 import {
   Row,
@@ -26,7 +27,7 @@ import {
 } from 'reactstrap';
 import classnames from 'classnames';
 import './HomePage.css';
-import currencyList from '../../../utils/currency_list';
+import Pagination from '../../atoms/Pagination/Pagination';
 import axios from 'axios';
 
 export default class HomePage extends React.Component {
@@ -42,7 +43,12 @@ export default class HomePage extends React.Component {
       posts: [],
       hashtags: [],
       coinsTableData: [],
-      currencies: []
+      currencies: [{ symbol: '', name: '' }],
+      ordersPagination: {
+        count: 1500,
+        offset: 0,
+        limit: 10
+      },
     };
     this.toggle = this.toggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
@@ -53,6 +59,8 @@ export default class HomePage extends React.Component {
     this.renderHashtags = this.renderHashtags.bind(this);
     this.renderPost = this.renderPost.bind(this);
     this.renderTable = this.renderTable.bind(this);
+    this.loadTableData = this.loadTableData.bind(this);
+    this.loadHashtags = this.loadHashtags.bind(this);
   }
   componentDidMount() {
     // axios.post('http://173.249.46.156/api/v1/get_hashtags_by_day/1')
@@ -74,26 +82,20 @@ export default class HomePage extends React.Component {
     // this.setState({
     //   hastags: a
     // })
-    axios.get('http://173.249.46.156/api/v1/resources/ticker_list')
-      .then(response => {
-        console.log(response.data.data.rows)
-        this.setState({ coinsTableData: response.data.data.rows })
-      })
+
+    // axios.get('http://173.249.46.156/api/v1/resources/ticker_list')
+    //   .then(response => {
+    //     console.log(response.data.data.rows)
+    //     this.setState({ coinsTableData: response.data.data.rows })
+    //   })
+
     axios.get('http://173.249.46.156/api/v1/resources/currency_list')
       .then(response => {
-        console.log(response.data.data.rows)
-        this.setState({ currencies: response.data.data.rows })
-      })
-    axios.get('http://173.249.46.156/api/v1/get_count_hashtags/30')
-      .then(response => {
-        console.log(response);
-        this.setState({
-          hastags: response.data
+        this.setState({ currencies: response.data.data.rows }, () => {
+          this.loadTableData(0, this.state.ordersPagination.limit)
         })
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.loadHashtags(30);
     axios.get('http://173.249.46.156/api/v1/get_posts')
       .then(response => {
         this.setState({
@@ -104,6 +106,44 @@ export default class HomePage extends React.Component {
         console.log(error);
       });
   }
+
+  loadTableData(offset, limit) {
+    this.setState({ ordersLoading: true });
+    axios.get('http://173.249.46.156/api/v1/resources/ticker_list?offset=' + offset + '&limit=' + limit)
+      .then(response => {
+        this.setState(() => ({
+          coinsTableData: response.data.data.rows,
+          ordersLoading: false,
+          ordersPagination: {
+            limit: 10,
+            count: response.data.data.count,
+            offset: offset
+          }
+        })
+        );
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          this.props.history.push('/login');
+        } else {
+          this.setState({ somethingWentWrong: true })
+        }
+      })
+  }
+
+  loadHashtags(days) {
+    axios.get('http://173.249.46.156/api/v1/get_count_hashtags/' + days)
+      .then(response => {
+        this.setState({
+          hastags: response.data
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
@@ -171,7 +211,7 @@ export default class HomePage extends React.Component {
     var hastagsList = this.state.hastags;
     for (var k in hastagsList) {
       elem.push(
-        <span className="maequeeFirstLine">{k}<span className="maequeeFirstLineValue">{' ' + hastagsList[k]}</span></span>
+        <span className="maequeeFirstLine" key={k}>{k}<span className="maequeeFirstLineValue">{' ' + hastagsList[k]}</span></span>
       )
     }
     return elem;
@@ -181,11 +221,9 @@ export default class HomePage extends React.Component {
     var postList = this.state.posts;
     for (var index = 0; index < postList.length; index++) {
       const element = postList[index];
-      if (element.type == 'tweet') {
+      if (element.type === 'tweet') {
         elem.push(
-          <TwitterTweetEmbed
-            tweetId={element.id_post}
-          />
+          <TweetEmbed key={index} id={element.id_post} />
         )
       }
 
@@ -195,19 +233,24 @@ export default class HomePage extends React.Component {
 
   renderTable() {
     return (
-      this.state.coinsTableData.map((item, index) => (
-        <tr key={index}>
-          <td> {item.currency_id}</td>
-          <td>
-            <td style={{ border: 0, padding: 0 }}><img src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" /></td>
-            <td style={{ border: 0, padding: 0, paddingLeft: 10 }}><span>{this.state.currencies[item.currency_id].symbol} <br /> {this.state.currencies[item.currency_id].name}</span></td>
-          </td>
-          <td>{item.price_usd}</td>
-          <td><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
-          <td>${item.market_cap}</td>
-          <td>${item.daily_volume}</td>
-        </tr>
-      ))
+      this.state.coinsTableData.map((item, index) => {
+        console.log(item)
+        return (
+          <tr key={index}>
+            <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
+            <td style={{ paddingRight: 5 }}>
+              <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
+            </td>
+            <td style={{ paddingLeft: 5 }}>
+              <strong>{this.state.currencies[item.currency_id].symbol}</strong> <br /> {this.state.currencies[item.currency_id].name}
+            </td>
+            <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
+            <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
+            <td style={{ lineHeight: '50px' }}>${item.market_cap}</td>
+            <td style={{ lineHeight: '50px' }}>${item.daily_volume}</td>
+          </tr>
+        )
+      })
     )
   }
 
@@ -249,22 +292,22 @@ export default class HomePage extends React.Component {
                 </NavItem>
                 <Card className="classificationToggleCard" style={{ margin: '0 10px' }}>
                   <CardBody className="classificationToggleCardBody" style={{ padding: 5, width: 70 }}>
-                    Twitter
+                    <span>Twitter</span>
                     <FormGroup check>
                       <Label check>
-                        <Input type="radio" name="radioTwiter" checked />{' '}
+                        <Input id="tw1" onClick={() => this.loadHashtags(1)} type="radio" name="radioTwiter" />{' '}
                         <span>1D</span>
                       </Label>
                     </FormGroup>
                     <FormGroup check>
                       <Label check>
-                        <Input type="radio" name="radioTwiter" />{' '}
+                        <Input id="tw2" onClick={() => this.loadHashtags(7)} type="radio" name="radioTwiter" />{' '}
                         <span>1W</span>
                       </Label>
                     </FormGroup>
                     <FormGroup check>
                       <Label check>
-                        <Input type="radio" name="radioTwiter" />{' '}
+                        <Input id="tw3" onClick={() => this.loadHashtags(30)} type="radio" name="radioTwiter" defaultChecked />{' '}
                         <span>1M</span>
                       </Label>
                     </FormGroup>
@@ -387,11 +430,11 @@ export default class HomePage extends React.Component {
                     </Collapse>
                   </div>
                   <br />
-                  <Table>
+                  <Table striped>
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>Name</th>
+                        <th colSpan="2">Name</th>
                         <th>Price</th>
                         <th>24h Change</th>
                         <th>Market Cap</th>
@@ -402,6 +445,15 @@ export default class HomePage extends React.Component {
                       <this.renderTable />
                     </tbody>
                   </Table>
+                  <div style={{ display: 'table', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '0.5rem' }}>
+                    <Pagination
+                      count={this.state.ordersPagination.count}
+                      offset={this.state.ordersPagination.offset}
+                      limit={this.state.ordersPagination.limit}
+                      changePage={this.loadTableData}
+                    />
+                  </div>
+                  <br /><br />
                 </Col>
                 <Col md="4">
                   <Card body inverse color="info">
