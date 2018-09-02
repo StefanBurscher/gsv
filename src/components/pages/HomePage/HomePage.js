@@ -233,7 +233,7 @@ class HomePage extends React.Component {
   }
 
   openForum(index) {
-    this.props.history.push('/forum/'+index);
+    this.props.history.push('/forum/' + index);
   }
 
   renderTable() {
@@ -241,7 +241,7 @@ class HomePage extends React.Component {
       this.state.coinsTableData.map((item, index) => {
         console.log(item)
         return (
-          <tr key={index} onClick={()=>this.openForum(index)} style={{cursor: 'pointer'}}>
+          <tr key={index} onClick={() => this.openForum(index)} style={{ cursor: 'pointer' }}>
             <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
             <td style={{ paddingRight: 5 }}>
               <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
@@ -265,7 +265,8 @@ class HomePage extends React.Component {
         <Navbar light expand="md">
           <Col md="4">
             <NavbarBrand href="/">
-              <Media object src="log.png" width="100%" alt="gsv" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} />
+              {/* <Media object src="log.png" width="100%" alt="gsv" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} /> */}
+              <Media object src="log.png" width="100%" alt="gsv" />
             </NavbarBrand>
           </Col>
           <NavbarToggler onClick={this.toggle} />
@@ -347,7 +348,6 @@ class HomePage extends React.Component {
                       <Button className="classification" color="primary" onClick={this.toggleInvestment}>Global Investable Market</Button>
                       <Button className="classification" color="primary" onClick={this.toggleClassification}>Classification</Button>
                       <Button className="classification" color="primary" onClick={this.toggleCoin}>Coin or Token</Button>
-                      <Button className="classification" color="primary" onClick={this.toggleMarket}>Market capitalization</Button>
                     </div>
                     <Collapse isOpen={this.state.toggleInvestment}>
                       <Card className="classificationToggleCard">
@@ -355,31 +355,7 @@ class HomePage extends React.Component {
                           <FormGroup check>
                             <Label check>
                               <Input type="radio" name="radio1" />{' '}
-                              <span>GIM 1250</span>
-                            </Label>
-                          </FormGroup>
-                          <FormGroup check>
-                            <Label check>
-                              <Input type="radio" name="radio1" />{' '}
-                              <span>GIM 100</span>
-                            </Label>
-                          </FormGroup>
-                          <FormGroup check>
-                            <Label check>
-                              <Input type="radio" name="radio1" />{' '}
-                              <span>GIM 50</span>
-                            </Label>
-                          </FormGroup>
-                        </CardBody>
-                      </Card>
-                    </Collapse>
-                    <Collapse isOpen={this.state.toggleMarket}>
-                      <Card className="classificationToggleCard">
-                        <CardBody className="classificationToggleCardBody">
-                          <FormGroup check>
-                            <Label check>
-                              <Input type="radio" name="radio1" />{' '}
-                              <span>GIM 1250</span>
+                              <span>GIM 600</span>
                             </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -450,7 +426,8 @@ class HomePage extends React.Component {
                       <this.renderTable />
                     </tbody>
                   </Table>
-                  <div style={{ display: 'table', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '0.5rem' }}>
+                  {/* <div style={{ display: 'table', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '0.5rem' }}> */}
+                  <div style={{ display: 'table', margin: 'auto', color: '#000' }}>
                     <Pagination
                       count={this.state.ordersPagination.count}
                       offset={this.state.ordersPagination.offset}
