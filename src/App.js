@@ -10,12 +10,13 @@ const BasicExample = () => (
   <Router>
     <div>
       <Route exact path="/" component={HomePage} />
-      <Route path="/login" component={Login} />
-      <Route path="/Register" component={Register} />
-      <Route path="/user/dashboard/mywallet" component={MyWallet} />
-      <Route path="/user/dashboard/marketreturn" component={Register} />
-      <Route path="/user/dashboard/marketrisk" component={Register} />
-      <Route path="/forum" component={Forum} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/Register" component={Register} />
+      <Route exact path="/user/dashboard/mywallet" component={MyWallet} />
+      <Route exact path="/user/dashboard/marketreturn" component={Register} />
+      <Route exact path="/user/dashboard/marketrisk" component={Register} />
+      <Route exact path="/forum/:kategorija" component={Forum} />
+      <Route exact path="/forum/:kategorija/:index" component={Forum} />
     </div>
   </Router>
 );

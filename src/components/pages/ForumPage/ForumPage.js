@@ -169,6 +169,7 @@ export default class HomePage extends React.Component {
   }
 
   render() {
+    console.log(this.props.match.params)
     return (
       <div>
         <Navbar>
@@ -194,7 +195,7 @@ export default class HomePage extends React.Component {
                     <span className="maequeeFirstLine">TRC <span className="maequeeFirstLineValue">+4</span></span> */}
           </marquee>
         </Navbar>
-        <Media object src="GSV.png" width="200" alt="Generic placeholder image" /> CHAT
+        <Media object src="/GSV.png" width="200" alt="Generic placeholder image" /> CHAT
         <div style={{ padding: '0 15px' }}>
           <Breadcrumb>
             <span className="topic">#Futures</span>
@@ -214,7 +215,7 @@ export default class HomePage extends React.Component {
             <ListGroupItem>
               <Media className="mt-1">
                 <Media left middle href="#">
-                  <Media object src="GSV.png" width="100" alt="Generic placeholder image" />
+                  <Media object src="/GSV.png" width="100" alt="Generic placeholder image" />
                 </Media>
                 <Media body>
                   <Row>
@@ -237,7 +238,7 @@ export default class HomePage extends React.Component {
             </ListGroupItem><ListGroupItem>
               <Media className="mt-1">
                 <Media left middle href="#">
-                  <Media object src="GSV.png" width="100" alt="Generic placeholder image" />
+                  <Media object src="/GSV.png" width="100" alt="Generic placeholder image" />
                 </Media>
                 <Media body>
                   <Row>
@@ -260,7 +261,7 @@ export default class HomePage extends React.Component {
             </ListGroupItem><ListGroupItem>
               <Media className="mt-1">
                 <Media left middle href="#">
-                  <Media object src="GSV.png" width="100" alt="Generic placeholder image" />
+                  <Media object src="/GSV.png" width="100" alt="Generic placeholder image" />
                 </Media>
                 <Media body>
                   <Row>

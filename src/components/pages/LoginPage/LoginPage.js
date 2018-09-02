@@ -31,35 +31,35 @@ class LoginPage extends React.Component {
 
     submitCredentialsHandle(e) {
         e.preventDefault();
-        this.rotation();
-        // this.setState({ accountLoading: true });
-        // axios.post(process.env.REACT_APP_BACKEND_URL + '/users/login', {
-        //     email: this.state.email,
-        //     password: this.state.password
-        // })
-        //     .then(response => {
-        //         this.setState({ accountLoading: false });
-        //         this.rotation();
-        //     })
-        //     .catch((error) => {
-        //         if (error.response.status === 401) {
-        //             this.setState({ accountLoading: false });
-        //             this.props.showErrorMessage(error.response.data.error.message);
-        //         } else if (error.response.status === 422) {
-        //             this.setState({ accountLoading: false });
-        //             this.props.showErrorMessage(error.response.data.error.message);
+        this.setState({ accountLoading: true });
+        axios.post('http://173.249.46.156/api/v1/users/login', {
+            email: this.state.email,
+            password: this.state.password
+        })
+            .then(response => {
+                this.setState({ accountLoading: false });
+                this.rotation();
+            })
+            .catch((error) => {
+                if (error.response.status === 401) {
+                    this.setState({ accountLoading: false });
 
-        //         }
-        //     });
+                    // this.props.showErrorMessage(error.response.data.error.message);
+                } else if (error.response.status === 422) {
+                    this.setState({ accountLoading: false });
+                    // this.props.showErrorMessage(error.response.data.error.message);
+
+                }
+            });
     }
     submiTwoFAtHandle(e) {
         e.preventDefault();
         this.setState({ verifyLoading: true });
-        axios.post(process.env.REACT_APP_BACKEND_URL + '/users/login1', {
+        axios.post('http://173.249.46.156/api/v1/users/login1', {
             token: e.target.token.value
         })
             .then(response => {
-                return axios.get(process.env.REACT_APP_BACKEND_URL + '/users/me')
+                return axios.get('http://173.249.46.156/api/v1/users/me')
             })
             .then(response => {
                 // this.props.userProfileSetUserId(response.data.data.id);
@@ -67,7 +67,7 @@ class LoginPage extends React.Component {
             })
             .catch((error) => {
                 if (error.response.status === 401 || error.response.status === 422) {
-                    this.props.showErrorMessage(error.response.data.error.message);
+                    // this.props.showErrorMessage(error.response.data.error.message);
                 }
                 this.setState({ verifyLoading: false });
             });

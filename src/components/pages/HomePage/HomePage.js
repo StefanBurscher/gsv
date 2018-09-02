@@ -1,6 +1,7 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
-import TweetEmbed from 'react-tweet-embed'
+// import TweetEmbed from 'react-tweet-embed'
 import InstagramEmbed from 'react-instagram-embed'
 import {
   Row,
@@ -30,7 +31,7 @@ import './HomePage.css';
 import Pagination from '../../atoms/Pagination/Pagination';
 import axios from 'axios';
 
-export default class HomePage extends React.Component {
+class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -223,7 +224,7 @@ export default class HomePage extends React.Component {
       const element = postList[index];
       if (element.type === 'tweet') {
         elem.push(
-          <TweetEmbed key={index} id={element.id_post} />
+          <TwitterTweetEmbed key={index} tweetId={element.id_post} />
         )
       }
 
@@ -231,12 +232,16 @@ export default class HomePage extends React.Component {
     return elem;
   }
 
+  openForum(index) {
+    this.props.history.push('/forum/'+index);
+  }
+
   renderTable() {
     return (
       this.state.coinsTableData.map((item, index) => {
         console.log(item)
         return (
-          <tr key={index}>
+          <tr key={index} onClick={()=>this.openForum(index)} style={{cursor: 'pointer'}}>
             <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
             <td style={{ paddingRight: 5 }}>
               <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
@@ -256,11 +261,11 @@ export default class HomePage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ color: '#fff' }}>
         <Navbar light expand="md">
           <Col md="4">
             <NavbarBrand href="/">
-              <Media object src="log.png" width="100%" alt="gsv" />
+              <Media object src="log.png" width="100%" alt="gsv" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} />
             </NavbarBrand>
           </Col>
           <NavbarToggler onClick={this.toggle} />
@@ -562,3 +567,5 @@ export default class HomePage extends React.Component {
     );
   }
 }
+
+export default withRouter(HomePage);

@@ -31,6 +31,22 @@ class LoginPage extends React.Component {
         }
     }
 
+    componentDidMount = () => {
+        axios.get('http://173.249.46.156/api/v1/utils/totp')
+            .then(response => {
+                console.log(response)
+                let formatedResponse = {
+                    secret: response.data.data.secret,
+                    qrCodeImage: response.data.data.imageData
+                };
+                this.setState(formatedResponse);
+                // this.props.registerPageSetFormData(formatedResponse);
+            })
+            .catch(function (error) {
+            });
+    };
+
+
     submitCredentialsHandle(e) {
         e.preventDefault();
         this.rotation();
@@ -129,7 +145,7 @@ class LoginPage extends React.Component {
                             </Row>
                             <br />
                             <InputTwoFA errors={this.state.errors} tFaDesc={"Authentication code"} name="token" />
-                            <br/>
+                            <br />
                             <RoundedButton loading={this.state.loading} style={{ display: 'block', margin: '0 auto', width: '150px' }}>{'FINISH'}</RoundedButton>
                         </form>
 

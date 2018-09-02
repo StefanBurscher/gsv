@@ -305,7 +305,7 @@ export default class MyWallet extends React.Component {
       }
     ]
     return (
-      <div>
+      <div style={{ color: '#000' }}>
         <Navbar light expand="md">
           <Col md="4">
             <NavbarBrand href="/">
