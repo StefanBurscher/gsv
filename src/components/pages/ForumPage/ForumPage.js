@@ -18,7 +18,8 @@ export default class HomePage extends React.Component {
     super(props);
     this.state = {
       currencies: [{ name: '', symbol: '' }],
-      hashtags: []
+      hashtags: [],
+      kategorija: ''
     };
     this.renderHashtags = this.renderHashtags.bind(this);
   }
@@ -26,6 +27,7 @@ export default class HomePage extends React.Component {
     axios.get('http://173.249.46.156/api/v1/resources/currency_list')
       .then(response => {
         this.setState({ currencies: response.data.data.rows })
+        this.setState({ kategorija: this.state.currencies[this.props.match.params.kategorija].symbol })
       })
     this.loadHashtags(30);
   }
@@ -83,7 +85,7 @@ export default class HomePage extends React.Component {
         <Media object src="/GSV.png" width="200" alt="Generic placeholder image" /> CHAT
         <div style={{ padding: '0 15px' }}>
           <Breadcrumb>
-            <span className="topic">#{this.state.currencies[this.props.match.params.kategorija].symbol}</span>
+            <span className="topic">#{this.state.kategorija}</span>
           </Breadcrumb>
           <p>Topic</p>
           <ListGroup>

@@ -50,6 +50,7 @@ class HomePage extends React.Component {
         offset: 0,
         limit: 10
       },
+      sort_order: 'ASC'
     };
     this.toggle = this.toggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
@@ -108,9 +109,9 @@ class HomePage extends React.Component {
       });
   }
 
-  loadTableData(offset, limit) {
+  loadTableData(offset, limit, sort_column = "", sort_order = "") {
     this.setState({ ordersLoading: true });
-    axios.get('http://173.249.46.156/api/v1/resources/ticker_list?offset=' + offset + '&limit=' + limit)
+    axios.get('http://173.249.46.156/api/v1/resources/ticker_list?offset=' + offset + '&limit=' + limit + (sort_column ? '&sort_column=' + sort_column : "") + (sort_order ? '&sort_order=' + sort_order : ""))
       .then(response => {
         this.setState(() => ({
           coinsTableData: response.data.data.rows,
@@ -236,27 +237,36 @@ class HomePage extends React.Component {
     this.props.history.push('/forum/' + index);
   }
 
-  renderTable() {
-    return (
-      this.state.coinsTableData.map((item, index) => {
-        console.log(item)
-        return (
-          <tr key={index} onClick={() => this.openForum(item.currency_id)} style={{ cursor: 'pointer' }}>
-            <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
-            <td style={{ paddingRight: 5 }}>
-              <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
-            </td>
-            <td style={{ paddingLeft: 5 }}>
-              <strong>{this.state.currencies[item.currency_id].symbol}</strong> <br /> {this.state.currencies[item.currency_id].name}
-            </td>
-            <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
-            <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
-            <td style={{ lineHeight: '50px' }}>${Number(item.market_cap).formatMoney(0, '.', ',')}</td>
-            <td style={{ lineHeight: '50px' }}>${Number(item.daily_volume).formatMoney(0, '.', ',')}</td>
-          </tr>
-        )
-      })
-    )
+  renderTable(data) {
+    console.log(data)
+    return data.length ?
+      (
+        data.map((item, index) => {
+          // console.log(item)
+          return (
+            <tr key={index} onClick={() => this.openForum(item.currency_id)} style={{ cursor: 'pointer' }}>
+              <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
+              <td style={{ paddingRight: 5 }}>
+                <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
+              </td>
+              <td style={{ paddingLeft: 5 }}>
+                <strong>{this.state.currencies[item.currency_id].symbol}</strong> <br /> {this.state.currencies[item.currency_id].name}
+              </td>
+              <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
+              <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
+              <td style={{ lineHeight: '50px' }}>${Number(item.market_cap).formatMoney(0, '.', ',')}</td>
+              <td style={{ lineHeight: '50px' }}>${Number(item.daily_volume).formatMoney(0, '.', ',')}</td>
+            </tr>
+          )
+        })
+      )
+      : null;
+  }
+  sort(sort_column) {
+    const sort_order = this.state.sort_order == 'ASC' ? 'DESC' : 'ASC';
+    console.log(sort_order)
+    this.setState({ sort_order });
+    this.loadTableData(0, this.state.ordersPagination.limit, sort_column, sort_order);
   }
 
   render() {
@@ -415,16 +425,38 @@ class HomePage extends React.Component {
                   <Table striped>
                     <thead>
                       <tr>
-                        <th>No.</th>
+                        <th onClick={() => this.sort('currency_id')}>No.{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
                         <th colSpan="2">Name</th>
-                        <th>Price</th>
-                        <th>24h Change</th>
-                        <th>Market Cap</th>
-                        <th>24h Vol(Global)</th>
+                        <th onClick={() => this.sort('price_usd')}>Price {this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
+                        <th onClick={() => this.sort('change_24h')}>24h Change{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
+                        <th onClick={() => this.sort('market_cap')}>Market Cap{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
+                        <th onClick={() => this.sort('daily_volume')}>24h Vol(Global){this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <this.renderTable />
+                      {/* <this.renderTable data={this.state.coinsTableData} /> */}
+                      {this.state.coinsTableData.length ?
+                        (
+                          this.state.coinsTableData.map((item, index) => {
+                            // console.log(item)
+                            return (
+                              <tr key={index} onClick={() => this.openForum(item.currency_id)} style={{ cursor: 'pointer' }}>
+                                <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
+                                <td style={{ paddingRight: 5 }}>
+                                  <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
+                                </td>
+                                <td style={{ paddingLeft: 5 }}>
+                                  <strong>{this.state.currencies[item.currency_id].symbol}</strong> <br /> {this.state.currencies[item.currency_id].name}
+                                </td>
+                                <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
+                                <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
+                                <td style={{ lineHeight: '50px' }}>${Number(item.market_cap).formatMoney(0, '.', ',')}</td>
+                                <td style={{ lineHeight: '50px' }}>${Number(item.daily_volume).formatMoney(0, '.', ',')}</td>
+                              </tr>
+                            )
+                          })
+                        )
+                        : null}
                     </tbody>
                   </Table>
                   {/* <div style={{ display: 'table', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '0.5rem' }}> */}
