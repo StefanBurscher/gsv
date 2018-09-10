@@ -32,6 +32,8 @@ class LoginPage extends React.Component {
     submitCredentialsHandle(e) {
         e.preventDefault();
         this.setState({ accountLoading: true });
+        
+        this.rotation();
         axios.post('http://173.249.46.156/api/v1/users/login', {
             email: this.state.email,
             password: this.state.password

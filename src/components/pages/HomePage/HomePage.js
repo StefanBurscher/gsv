@@ -331,7 +331,7 @@ class HomePage extends React.Component {
           </Collapse>
         </Navbar>
 
-        <div style={{ padding: '0 15px' }}>
+        <div style={{ padding: '0 15px', paddingTop: 123 }}>
           <br />
           <Row>
             <Col md="3">
