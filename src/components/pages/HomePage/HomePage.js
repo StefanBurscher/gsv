@@ -241,7 +241,7 @@ class HomePage extends React.Component {
       this.state.coinsTableData.map((item, index) => {
         console.log(item)
         return (
-          <tr key={index} onClick={() => this.openForum(index)} style={{ cursor: 'pointer' }}>
+          <tr key={index} onClick={() => this.openForum(item.currency_id)} style={{ cursor: 'pointer' }}>
             <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
             <td style={{ paddingRight: 5 }}>
               <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />

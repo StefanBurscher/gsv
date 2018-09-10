@@ -17,51 +17,22 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
-      activeTab: '1',
-      toggleInvestment: false,
-      toggleMarket: false,
-      toggleClassification: false,
-      toggleCoin: false,
-      posts: [],
+      currencies: [{ name: '', symbol: '' }],
       hashtags: []
     };
-    this.toggle = this.toggle.bind(this);
-    this.toggleTab = this.toggleTab.bind(this);
-    this.toggleInvestment = this.toggleInvestment.bind(this);
-    this.toggleMarket = this.toggleMarket.bind(this);
-    this.toggleClassification = this.toggleClassification.bind(this);
-    this.toggleCoin = this.toggleCoin.bind(this);
     this.renderHashtags = this.renderHashtags.bind(this);
-    this.renderPost = this.renderPost.bind(this);
   }
   componentDidMount() {
-    // axios.post('http://173.249.46.156/api/v1/get_hashtags_by_day/1')
-    //   .then(response => {
-    //     console.log(response);
-    //     this.setState({
-    //       hastags: response
-    //     })
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // var a = {
-    //   "LTC": 250,
-    //   "BTC": 1474,
-    //   "TRC": 0,
-    //   "NVC": 0,
-    // }
-    // this.setState({
-    //   hastags: a
-    // })
-    axios.get(`https://jsonplaceholder.typicode.com/users`)
-      .then(res => {
-        console.log(res);
-      })
-    axios.get('http://173.249.46.156/api/v1/get_count_hashtags/30')
+    axios.get('http://173.249.46.156/api/v1/resources/currency_list')
       .then(response => {
-        console.log(response);
+        this.setState({ currencies: response.data.data.rows })
+      })
+    this.loadHashtags(30);
+  }
+
+  loadHashtags(days) {
+    axios.get('http://173.249.46.156/api/v1/get_count_hashtags/' + days)
+      .then(response => {
         this.setState({
           hastags: response.data
         })
@@ -69,76 +40,6 @@ export default class HomePage extends React.Component {
       .catch((error) => {
         console.log(error);
       });
-    axios.get('http://173.249.46.156/api/v1/get_posts')
-      .then(response => {
-        this.setState({
-          posts: response.data.data.items
-        })
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-  toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
-  toggleInvestment() {
-    this.setState({
-      toggleInvestment: !this.state.toggleInvestment,
-      toggleMarket: false,
-      toggleClassification: false,
-      toggleCoin: false
-    });
-  }
-  toggleMarket() {
-    this.setState({
-      toggleInvestment: false,
-      toggleMarket: !this.state.toggleMarket,
-      toggleClassification: false,
-      toggleCoin: false
-    });
-  }
-  toggleClassification() {
-    this.setState({
-      toggleInvestment: false,
-      toggleMarket: false,
-      toggleClassification: !this.state.toggleClassification,
-      toggleCoin: false
-    });
-  }
-  toggleCoin() {
-    this.setState({
-      toggleInvestment: false,
-      toggleMarket: false,
-      toggleClassification: false,
-      toggleCoin: !this.state.toggleCoin
-    });
-  }
-
-  renderTable() {
-    var elem = [];
-    for (var k in currencyList) {
-      elem.push(
-        <tr>
-          <th scope="row" className="text-center">{k}</th>
-          <td>Coin name</td>
-          <td><img src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + currencyList[k] + '.png'} alt={k} width="32" className="m-auto d-block" /></td>
-          <td>Blockchain <br />infrastructure</td>
-          <td>coin price</td>
-          <td>coin market capitalization</td>
-        </tr>
-      )
-    }
-    return elem;
   }
 
   renderHashtags() {
@@ -146,24 +47,8 @@ export default class HomePage extends React.Component {
     var hastagsList = this.state.hastags;
     for (var k in hastagsList) {
       elem.push(
-        <span className="maequeeFirstLine">{k}<span className="maequeeFirstLineValue">{' ' + hastagsList[k]}</span></span>
+        <span className="maequeeFirstLine" key={k}>{k}<span className="maequeeFirstLineValue">{' ' + hastagsList[k]}</span></span>
       )
-    }
-    return elem;
-  }
-  renderPost() {
-    var elem = [];
-    var postList = this.state.posts;
-    for (var index = 0; index < postList.length; index++) {
-      const element = postList[index];
-      if (element.type == 'tweet') {
-        elem.push(
-          <TwitterTweetEmbed
-            tweetId={element.id_post}
-          />
-        )
-      }
-
     }
     return elem;
   }
@@ -198,19 +83,9 @@ export default class HomePage extends React.Component {
         <Media object src="/GSV.png" width="200" alt="Generic placeholder image" /> CHAT
         <div style={{ padding: '0 15px' }}>
           <Breadcrumb>
-            <span className="topic">#Futures</span>
-            <span className="topic">#BTCMINING</span>
+            <span className="topic">#{this.state.currencies[this.props.match.params.kategorija].symbol}</span>
           </Breadcrumb>
-          <p>Topics</p>
-          <Breadcrumb>
-            <span className="topic">#BTC</span>
-            <span className="topic">#BCC</span>
-            <span className="topic">#ETH</span>
-            <span className="topic">#XRP</span>
-            <span className="topic">#XRM</span>
-            <span className="topic">#NEO</span>
-          </Breadcrumb>
-          <p>Coins</p>
+          <p>Topic</p>
           <ListGroup>
             <ListGroupItem>
               <Media className="mt-1">
