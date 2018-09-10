@@ -251,8 +251,8 @@ class HomePage extends React.Component {
             </td>
             <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
             <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
-            <td style={{ lineHeight: '50px' }}>${item.market_cap}</td>
-            <td style={{ lineHeight: '50px' }}>${item.daily_volume}</td>
+            <td style={{ lineHeight: '50px' }}>${Number(item.market_cap).formatMoney(0, '.', ',')}</td>
+            <td style={{ lineHeight: '50px' }}>${Number(item.daily_volume).formatMoney(0, '.', ',')}</td>
           </tr>
         )
       })
@@ -262,6 +262,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <div style={{ color: '#fff' }}>
+
         <Navbar light expand="md">
           <Col md="4">
             <NavbarBrand href="/">
