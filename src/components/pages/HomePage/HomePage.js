@@ -273,13 +273,13 @@ class HomePage extends React.Component {
 
   coinFormatter(num) {
     if (num > 999999) {
-      return num > 999 ? (num / 1000000).toFixed(1) + 'M' : num
+      return num > 999 ? (num / 1000000).formatMoney(2, '.', ',') + 'M' : num
     } else if (num > 999) {
-      return (num / 1000).toFixed(1) + 'K';
+      return (num / 1000).formatMoney(2, '.', ',') + 'K';
     } else {
       return num;
     }
-    return num > 999 ? (num / 1000).toFixed(1) + 'k' : num
+    return num > 999 ? (num / 1000).formatMoney(2, '.', ',') + 'k' : num
   }
 
   render() {
@@ -403,13 +403,13 @@ class HomePage extends React.Component {
                           <FormGroup check>
                             <Label check>
                               <Input type="radio" name="radio2" />{' '}
-                              <span>Blockchain infrastructure</span>
+                              <span>Blockchain Infrastructure</span>
                             </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
                               <Input type="radio" name="radio2" />{' '}
-                              <span>Financial services</span>
+                              <span>Financial Services</span>
                             </Label>
                           </FormGroup>
 
@@ -484,17 +484,17 @@ class HomePage extends React.Component {
                     </Collapse>
                   </div>
                   <br />
-                  <Table striped>
+                  <Table>
                     <thead>
                       <tr>
-                        <th onClick={() => this.sort('currency_id')}>No.{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
+                        <th><p onClick={() => this.sort('currency_id')}>No.{this.state.sort_order == 'ASC' ? <span style={{ fontSize: 10, padding: 7 }}>&#9650;</span> : <span style={{ fontSize: 10, padding: 7 }}>&#9660;</span>}</p></th>
                         <th colSpan="2">Name</th>
-                        <th onClick={() => this.sort('price_usd')}>Price {this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
-                        <th onClick={() => this.sort('change_24h')}>24h Change{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
-                        <th onClick={() => this.sort('market_cap')}>Market Cap{this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
-                        <th onClick={() => this.sort('daily_volume')}>24h Vol(Global){this.state.sort_order == 'ASC' ? <span>&#9650;</span> : <span>&#9660;</span>}</th>
-                      </tr>
-                    </thead>
+                        <th><p onClick={() => this.sort('price_usd')}>Price {this.state.sort_order == 'ASC' ? <span style={{ fontSize: 10, padding: 7 }}>&#9650;</span> : <span style={{ fontSize: 10, padding: 7 }}>&#9660;</span>}</p></th>
+                        <th><p onClick={() => this.sort('change_24h')}>24h Change{this.state.sort_order == 'ASC' ? <span style={{ fontSize: 10, padding: 7 }}>&#9650;</span> : <span style={{ fontSize: 10, padding: 7 }}>&#9660;</span>}</p></th>
+                        <th><p onClick={() => this.sort('market_cap')}>Market Cap{this.state.sort_order == 'ASC' ? <span style={{ fontSize: 10, padding: 7 }}>&#9650;</span> : <span style={{ fontSize: 10, padding: 7 }}>&#9660;</span>}</p></th>
+                        <th><p onClick={() => this.sort('daily_volume')}>24h Vol(Global){this.state.sort_order == 'ASC' ? <span style={{ fontSize: 10, padding: 7 }}>&#9650;</span> : <span style={{ fontSize: 10, padding: 7 }}>&#9660;</span>}</p></th>
+                      </tr >
+                    </thead >
                     <tbody>
                       {/* <this.renderTable data={this.state.coinsTableData} /> */}
                       {this.state.coinsTableData.length ?
@@ -503,7 +503,7 @@ class HomePage extends React.Component {
                             // console.log(item)
                             return (
                               <tr key={index} onClick={() => this.openForum(item.currency_id)} style={{ cursor: 'pointer' }}>
-                                <th scope="row" style={{ lineHeight: '50px' }}>{item.currency_id}</th>
+                                <td scope="row" style={{ lineHeight: '50px', textAlign: 'center' }}><b>{item.currency_id}</b></td>
                                 <td style={{ paddingRight: 5 }}>
                                   <img style={{ paddingTop: 9 }} src={'https://s2.coinmarketcap.com/static/img/coins/32x32/' + item.currency_id + '.png'} alt={'BTC'} width="32" className="m-auto d-block" />
                                 </td>
@@ -520,18 +520,18 @@ class HomePage extends React.Component {
                         )
                         : null}
                     </tbody>
-                  </Table>
+                  </Table >
                   {/* <div style={{ display: 'table', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '0.5rem' }}> */}
-                  <div style={{ display: 'table', margin: 'auto', color: '#000' }}>
+                  < div style={{ display: 'table', margin: 'auto', color: '#000' }}>
                     <Pagination
                       count={this.state.ordersPagination.count}
                       offset={this.state.ordersPagination.offset}
                       limit={this.state.ordersPagination.limit}
                       changePage={this.loadTableData}
                     />
-                  </div>
-                  <br /><br />
-                </Col>
+                  </div >
+                  <br /> <br />
+                </Col >
                 <Col md="4">
                   <Card body inverse color="info">
                     <CardTitle>Special Title Treatment</CardTitle>
@@ -551,7 +551,7 @@ class HomePage extends React.Component {
                     <Button color="secondary">Button</Button>
                   </Card>
                 </Col>
-              </Row>
+              </Row >
               <Row>
                 <Col>
                   <Nav tabs>
@@ -631,11 +631,11 @@ class HomePage extends React.Component {
                   </TabContent>
                 </Col>
               </Row>
-            </Col>
-          </Row>
-        </div>
+            </Col >
+          </Row >
+        </div >
         {/* <Media object src="log.png" width="100%" alt="Generic placeholder image" /> */}
-      </div>
+      </div >
     );
   }
 }
