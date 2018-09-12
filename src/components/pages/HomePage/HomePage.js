@@ -50,7 +50,8 @@ class HomePage extends React.Component {
         offset: 0,
         limit: 10
       },
-      sort_order: 'ASC'
+      sort_order: 'ASC',
+      sort_column: 'currency_id'
     };
     this.toggle = this.toggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
@@ -109,9 +110,9 @@ class HomePage extends React.Component {
       });
   }
 
-  loadTableData(offset, limit, sort_column = "", sort_order = "") {
+  loadTableData(offset, limit) {
     this.setState({ ordersLoading: true });
-    axios.get('http://173.249.46.156/api/v1/resources/ticker_list?offset=' + offset + '&limit=' + limit + (sort_column ? '&sort_column=' + sort_column : "") + (sort_order ? '&sort_order=' + sort_order : ""))
+    axios.get('http://173.249.46.156/api/v1/resources/ticker_list?offset=' + offset + '&limit=' + limit + '&sort_column=' + this.state.sort_column + '&sort_order=' + this.state.sort_order)
       .then(response => {
         this.setState(() => ({
           coinsTableData: response.data.data.rows,
@@ -263,10 +264,11 @@ class HomePage extends React.Component {
       : null;
   }
   sort(sort_column) {
-    const sort_order = this.state.sort_order == 'ASC' ? 'DESC' : 'ASC';
-    console.log(sort_order)
-    this.setState({ sort_order });
-    this.loadTableData(0, this.state.ordersPagination.limit, sort_column, sort_order);
+    const sort_order = (this.state.sort_order == 'ASC' ? 'DESC' : 'ASC');
+    this.setState(
+      { sort_order: sort_order, sort_column: sort_column },
+      () => this.loadTableData(0, this.state.ordersPagination.limit)
+    );
   }
 
   render() {
@@ -342,7 +344,7 @@ class HomePage extends React.Component {
           </Collapse>
         </Navbar>
 
-        <div style={{ padding: '0 15px', paddingTop: 123 }}>
+        <div style={{ padding: '0 15px' }}>
           <br />
           <Row>
             <Col md="3">

@@ -80,9 +80,9 @@ canvas {
 }
 
 .navbar.navbar-expand-md.navbar-light {
-    background: #fafafac9;
+    /* background: #fafafa85;
     position: fixed;
     margin: 0;
     z-index: 1000;
-    border-bottom: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb4d; */
 }
