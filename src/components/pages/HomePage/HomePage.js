@@ -271,6 +271,17 @@ class HomePage extends React.Component {
     );
   }
 
+  coinFormatter(num) {
+    if (num > 999999) {
+      return num > 999 ? (num / 1000000).toFixed(1) + 'M' : num
+    } else if (num > 999) {
+      return (num / 1000).toFixed(1) + 'K';
+    } else {
+      return num;
+    }
+    return num > 999 ? (num / 1000).toFixed(1) + 'k' : num
+  }
+
   render() {
     return (
       <div style={{ color: '#fff' }}>
@@ -401,6 +412,55 @@ class HomePage extends React.Component {
                               <span>Financial services</span>
                             </Label>
                           </FormGroup>
+
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Trading and Exchanges</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Computing and AI</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Network and Communications</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Gaming and VR</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Commerce and Advertising</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Media and Content</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Funding and Venture Capital</span>
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="radio" name="radio2" />{' '}
+                              <span>Tokenization</span>
+                            </Label>
+                          </FormGroup>
                         </CardBody>
                       </Card>
                     </Collapse>
@@ -452,8 +512,8 @@ class HomePage extends React.Component {
                                 </td>
                                 <td style={{ lineHeight: '50px' }}><span className={index % 2 ? "priceSpan" : "priceSpanSecond"}>{'$' + (item.price_usd).formatMoney(2, '.', ',')}</span></td>
                                 <td style={{ lineHeight: '50px' }}><span style={{ color: item.change_24h > 0 ? '#40b057' : '#cf2526' }}>{item.change_24h}%</span></td>
-                                <td style={{ lineHeight: '50px' }}>${Number(item.market_cap).formatMoney(0, '.', ',')}</td>
-                                <td style={{ lineHeight: '50px' }}>${Number(item.daily_volume).formatMoney(0, '.', ',')}</td>
+                                <td style={{ lineHeight: '50px' }}>${this.coinFormatter(Number(item.market_cap))}</td>
+                                <td style={{ lineHeight: '50px' }}>${this.coinFormatter(Number(item.daily_volume))}</td>
                               </tr>
                             )
                           })
