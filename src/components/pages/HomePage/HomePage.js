@@ -43,6 +43,7 @@ class HomePage extends React.Component {
       toggleCoin: false,
       posts: [],
       hashtags: [],
+      tickerCurrency: [],
       coinsTableData: [],
       currencies: [{ symbol: '', name: '' }],
       ordersPagination: {
@@ -60,17 +61,19 @@ class HomePage extends React.Component {
     this.toggleClassification = this.toggleClassification.bind(this);
     this.toggleCoin = this.toggleCoin.bind(this);
     this.renderHashtags = this.renderHashtags.bind(this);
+    this.rendertickerCurrency = this.rendertickerCurrency.bind(this);
     this.renderPost = this.renderPost.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.loadTableData = this.loadTableData.bind(this);
     this.loadHashtags = this.loadHashtags.bind(this);
+    this.loadTickerCurrency = this.loadTickerCurrency.bind(this);
   }
   componentDidMount() {
     // axios.post('http://173.249.46.156/api/v1/get_hashtags_by_day/1')
     //   .then(response => {
     //     console.log(response);
     //     this.setState({
-    //       hastags: response
+    //       hashtags: response
     //     })
     //   })
     //   .catch((error) => {
@@ -83,7 +86,7 @@ class HomePage extends React.Component {
     //   "NVC": 0,
     // }
     // this.setState({
-    //   hastags: a
+    //   hashtags: a
     // })
 
     // axios.get('http://173.249.46.156/api/v1/resources/ticker_list')
@@ -99,6 +102,7 @@ class HomePage extends React.Component {
         })
       })
     this.loadHashtags(30);
+    this.loadTickerCurrency(30);
     axios.get('http://173.249.46.156/api/v1/get_posts')
       .then(response => {
         this.setState({
@@ -138,7 +142,7 @@ class HomePage extends React.Component {
     axios.get('http://173.249.46.156/api/v1/get_count_hashtags/' + days)
       .then(response => {
         this.setState({
-          hastags: response.data
+          hashtags: response.data
         })
       })
       .catch((error) => {
@@ -146,6 +150,17 @@ class HomePage extends React.Component {
       });
   }
 
+  loadTickerCurrency(days) {
+    axios.get('http://173.249.46.156/api/v1/curreny_tape/' + days)
+      .then(response => {
+        this.setState({
+          tickerCurrency: response.data
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   toggle() {
     this.setState({
@@ -211,24 +226,44 @@ class HomePage extends React.Component {
 
   renderHashtags() {
     var elem = [];
-    var hastagsList = this.state.hastags;
-    for (var k in hastagsList) {
+    var hashtagsList = this.state.hashtags;
+    for (var k in hashtagsList) {
       elem.push(
-        <span className="maequeeFirstLine" key={k}>{k}<span className="maequeeFirstLineValue">{' ' + hastagsList[k]}</span></span>
+        <span className="maequeeFirstLine" key={k}>{k}<span className="maequeeFirstLineValue">{' ' + hashtagsList[k] + '%'}</span></span>
       )
     }
     return elem;
   }
+  rendertickerCurrency() {
+    var elem = [];
+    var tickerCurrencyList = this.state.tickerCurrency;
+    for (var k in tickerCurrencyList) {
+      elem.push(
+        <span className="maequeeFirstLine" key={k}>{k}<span className="maequeeFirstLineValue">{' ' + tickerCurrencyList[k]}</span></span>
+      )
+    }
+    return elem;
+  }
+
   renderPost() {
     var elem = [];
     var postList = this.state.posts;
+    console.log(this.state.posts.length)
     for (var index = 0; index < postList.length; index++) {
       const element = postList[index];
       if (element.type === 'tweet') {
         elem.push(
           <TwitterTweetEmbed key={index} tweetId={element.id_post} />
         )
-      }
+      } else
+        if (element.type === 'image') {
+          elem.push(
+            <InstagramEmbed
+              key={index}
+              url={'https://instagr.am/p/' + element.id_post}
+          />
+          )
+        }
 
     }
     return elem;
@@ -302,22 +337,7 @@ class HomePage extends React.Component {
                     <this.renderHashtags />
                   </marquee>
                   <marquee>
-                    {/* <span className="maequeeFirstLine">TRC <span className="maequeeFirstLineValue">+7</span></span>
-                    <span className="maequeeFirstLine">MNC <span className="maequeeFirstLineValue">-2.4</span></span>
-                    <span className="maequeeFirstLine">BTC <span className="maequeeFirstLineValue">+4</span></span>
-                    <span className="maequeeFirstLine">NMC <span className="maequeeFirstLineValue">-4</span></span>
-                    <span className="maequeeFirstLine">LTC <span className="maequeeFirstLineValue">-2</span></span>
-                    <span className="maequeeFirstLine">LTC <span className="maequeeFirstLineValue">+2.8</span></span>
-                    <span className="maequeeFirstLine">PPC <span className="maequeeFirstLineValue">-4</span></span>
-                    <span className="maequeeFirstLine">NMC <span className="maequeeFirstLineValue">-4</span></span>
-                    <span className="maequeeFirstLine">NVC <span className="maequeeFirstLineValue">+5</span></span>
-                    <span className="maequeeFirstLine">PPC <span className="maequeeFirstLineValue">+4</span></span>
-                    <span className="maequeeFirstLine">NVC <span className="maequeeFirstLineValue">+4</span></span>
-                    <span className="maequeeFirstLine">FTC <span className="maequeeFirstLineValue">-4</span></span>
-                    <span className="maequeeFirstLine">MNC <span className="maequeeFirstLineValue">-1.1</span></span>
-                    <span className="maequeeFirstLine">FTC <span className="maequeeFirstLineValue">+1</span></span>
-                    <span className="maequeeFirstLine">BTC <span className="maequeeFirstLineValue">-4</span></span>
-                    <span className="maequeeFirstLine">TRC <span className="maequeeFirstLineValue">+4</span></span> */}
+                    <this.rendertickerCurrency />
                   </marquee>
                 </NavItem>
                 <Card className="classificationToggleCard" style={{ margin: '0 10px' }}>
@@ -325,19 +345,19 @@ class HomePage extends React.Component {
                     <span>Twitter</span>
                     <FormGroup check>
                       <Label check>
-                        <Input id="tw1" onClick={() => this.loadHashtags(1)} type="radio" name="radioTwiter" />{' '}
+                        <Input id="tw1" onClick={() => { this.loadHashtags(1); this.loadTickerCurrency(1) }} type="radio" name="radioTwiter" />{' '}
                         <span>1D</span>
                       </Label>
                     </FormGroup>
                     <FormGroup check>
                       <Label check>
-                        <Input id="tw2" onClick={() => this.loadHashtags(7)} type="radio" name="radioTwiter" />{' '}
+                        <Input id="tw2" onClick={() => { this.loadHashtags(7); this.loadTickerCurrency(7) }} type="radio" name="radioTwiter" />{' '}
                         <span>1W</span>
                       </Label>
                     </FormGroup>
                     <FormGroup check>
                       <Label check>
-                        <Input id="tw3" onClick={() => this.loadHashtags(30)} type="radio" name="radioTwiter" defaultChecked />{' '}
+                        <Input id="tw3" onClick={() => { this.loadHashtags(30); this.loadTickerCurrency(30) }} type="radio" name="radioTwiter" defaultChecked />{' '}
                         <span>1M</span>
                       </Label>
                     </FormGroup>
