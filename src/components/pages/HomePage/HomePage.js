@@ -589,7 +589,7 @@ class HomePage extends React.Component {
                         className={classnames({ active: this.state.activeTab === '2' })}
                         onClick={() => { this.toggleTab('2'); }}
                       >
-                        Performance appraisals
+                        Performance Appraisals
             </NavLink>
                     </NavItem>
                     <NavItem>
@@ -613,7 +613,7 @@ class HomePage extends React.Component {
                     <TabPane tabId="1">
                       <Row>
                         <Col sm="12">
-                          <span style={{ color: '#1c9cf3' }}>Cognitive Errors</span> are basic statistical, information-processing, or memory errors that can cause decision to deviation from the rational decisions from traditional finance. Cognitive Errors can be thought of as blind spots or distortions in traders head. They stem from faulty reasoning so better information, education, and advice ca often correct for them: they can be moderated, and we are hoping that at GSV we’ll help users with data and information.<br /><br />
+                          Cognitive Errors are basic statistical, information-processing, or memory errors that can cause decision to deviation from the rational decisions from traditional finance. Cognitive Errors can be thought of as blind spots or distortions in traders head. They stem from faulty reasoning so better information, education, and advice ca often correct for them: they can be moderated, and we are hoping that at GSV we’ll help users with data and information.<br /><br />
                           <span style={{ color: '#1c9cf3' }}>Conservatism Bias</span> – traders tend to maintain their prior views, forecasts or believes despite availability and release of new material information. The traders will  be tend slower adopting to new information and they might not adequately incorporate it into decision making. Conservatism will cause traders to overweight their initial beliefs about probabilities and outcomes and under-react to new information. Traders may correct for this bias by assigning higher probability to newer information.<br /><br />
                           <span style={{ color: '#1c9cf3' }}>Confirmation Bias</span> – is a belief perseverance bias in which traders tend to look for and notice what confirms their beliefs, and to ignore or undervalue what contradicts their beliefs. Traders often place greater weight on information that supports their beliefs. One way to correct for this bias is actively seeking out information that challenges trader’s beliefs.<br /><br />
                           <span style={{ color: '#1c9cf3' }}>Representativeness Bias</span> – is a belief perseverance bias too in which traders tend to #1 classify new information based on the past experiences & would wrongfully classify certain investments, or #2 they might mistakenly believe that a small sample is a representative of the true ‘population’ value. Even well-informed decisions can lead to unfavorable results; however, making the extra effort (taking time) to gather ‘complete’ information, positive or negative will likely result in better decisions. Traders may correct this bias by viewing a periodic table of investments returns by calendar month.<br /><br />
